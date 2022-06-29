@@ -1,23 +1,25 @@
 const express = require('express')
-const routes = express.Router()
+const {FreteiroControllers, FornecedorControllers}   = require('../controllers')
 
-// const { UserControllers, SyncControllers, ServidoresControllers, UsuariosControllers } = require('../controllers')
+const routes = express.Router()
 
 routes.get('/', (req, res) => {
     res.send('Controle-estoque online!');
 })
 
-// // Sync
-// routes.get('/sync/:database', SyncControllers.get)
+// Freteiro
+routes.get('/api/freteiro', FreteiroControllers.index)
+routes.get('/api/freteiro/:id', FreteiroControllers.getOne)
+routes.post('/api/freteiro', FreteiroControllers.create)
+routes.put('/api/freteiro/:id', FreteiroControllers.update)
+routes.delete('/api/freteiro/:id', FreteiroControllers.delete)
 
-// // Servidores
-// routes.get('/api/:database/servidores', ServidoresControllers.get)
-
-// // Usuarios
-// routes.get('/api/:database/usuarios', UsuariosControllers.index)
-// routes.get('/api/:database/usuarios/:id', UsuariosControllers.getOne)
-
-// routes.get('/api/:database/util', UsuariosControllers.util)
+// Fornecedor
+routes.get('/api/fornecedor', FornecedorControllers.index)
+routes.get('/api/fornecedor/:id', FornecedorControllers.getOne)
+routes.post('/api/fornecedor', FornecedorControllers.create)
+routes.put('/api/fornecedor/:id', FornecedorControllers.update)
+routes.delete('/api/fornecedor/:id', FornecedorControllers.delete)
 
 // // Users
 // routes.get('/user', UserControllers.index)
