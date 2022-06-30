@@ -1,9 +1,9 @@
 const FreteiroControllers = require('./FreteiroControllers')
 const FornecedorControllers = require('./FornecedorControllers');
-// const ServidoresControllers = require('./ServidoresControllers')
+const ProdutoControllers = require('./ProdutoControllers')
 
 module.exports = {
     FreteiroControllers,
     FornecedorControllers,
-    // ServidoresControllers,
+    ProdutoControllers,
 };

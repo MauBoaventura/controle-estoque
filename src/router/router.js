@@ -1,5 +1,5 @@
 const express = require('express')
-const {FreteiroControllers, FornecedorControllers}   = require('../controllers')
+const {FreteiroControllers, FornecedorControllers, ProdutoControllers}   = require('../controllers')
 
 const routes = express.Router()
 
@@ -20,6 +20,13 @@ routes.get('/api/fornecedor/:id', FornecedorControllers.getOne)
 routes.post('/api/fornecedor', FornecedorControllers.create)
 routes.put('/api/fornecedor/:id', FornecedorControllers.update)
 routes.delete('/api/fornecedor/:id', FornecedorControllers.delete)
+
+// Produto
+routes.get('/api/produto', ProdutoControllers.index)
+routes.get('/api/produto/:id', ProdutoControllers.getOne)
+routes.post('/api/produto', ProdutoControllers.create)
+routes.put('/api/produto/:id', ProdutoControllers.update)
+routes.delete('/api/produto/:id', ProdutoControllers.delete)
 
 // // Users
 // routes.get('/user', UserControllers.index)
