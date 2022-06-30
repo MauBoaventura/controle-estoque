@@ -7,7 +7,7 @@ const Op = Sequelize.Op;
 module.exports = {
     async index(req, res) {
         if (req.query) {
-            const nome = req.query.nome??"";
+            const nome = req.query.nome ?? "";
             try {
                 let data = await conexao.freteiro.findAll({
                     where: {
@@ -27,7 +27,8 @@ module.exports = {
 
             } catch (error) {
                 return res.status(401).json({
-                    msg: "Ocoreu um erro!"
+                    msg: "Ocoreu um erro!",
+                    error
                 })
             }
         } else {
@@ -35,7 +36,8 @@ module.exports = {
                 let data = await conexao.freteiro.findAll();
             } catch (error) {
                 return res.status(401).json({
-                    msg: "Ocoreu um erro!"
+                    msg: "Ocoreu um erro!",
+                    error
                 })
             }
         }
@@ -63,7 +65,8 @@ module.exports = {
 
         } catch (error) {
             return res.status(401).json({
-                msg: "Ocoreu um erro!"
+                msg: "Ocoreu um erro!",
+                error
             })
         }
     },
@@ -80,7 +83,8 @@ module.exports = {
 
         } catch (error) {
             return res.status(401).json({
-                msg: "Ocoreu um erro!"
+                msg: "Ocoreu um erro!",
+                error
             })
         }
         res.status(201).send()
@@ -91,7 +95,7 @@ module.exports = {
         try {
             let data = await conexao.freteiro.findOne({ where: { id } });
             if ((data)) {
-                data= await conexao.freteiro.update({
+                data = await conexao.freteiro.update({
                     nome: req.body.nome
                 }, { where: { id } });
                 return res.status(200).json({
@@ -104,7 +108,10 @@ module.exports = {
                 })
         } catch (error) {
             console.log(error)
-            return res.status(404).send(error)
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
         }
     },
 
@@ -124,7 +131,10 @@ module.exports = {
                 })
         } catch (error) {
             console.log(error)
-            return res.status(404).send(error)
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
         }
     }
 
