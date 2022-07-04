@@ -17,9 +17,7 @@ module.exports = {
                     }
                 });
                 if ((data))
-                    return res.status(200).json({
-                        data
-                    })
+                    return res.status(200).json(data)
                 else
                     return res.status(401).json({
                         msg: "Freteiro não cadastrado!"
@@ -43,10 +41,7 @@ module.exports = {
         }
 
 
-        res.json([
-            data
-        ]
-        )
+        res.json(data)
     },
 
     async getOne(req, res) {
@@ -55,9 +50,7 @@ module.exports = {
         try {
             let data = await conexao.freteiro.findOne({ where: { id } });
             if ((data))
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             else
                 return res.status(401).json({
                     msg: "Freteiro não cadastrado!"
@@ -98,9 +91,7 @@ module.exports = {
                 data = await conexao.freteiro.update({
                     nome: req.body.nome
                 }, { where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({
@@ -121,9 +112,7 @@ module.exports = {
             let data = await conexao.freteiro.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.freteiro.destroy({ where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({

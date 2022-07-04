@@ -33,9 +33,7 @@ module.exports = {
                     }
                 });
                 if ((data))
-                    return res.status(200).json({
-                        data
-                    })
+                    return res.status(200).json(data)
                 else
                     return res.status(401).json({
                         msg: "Produto não cadastrado!"
@@ -50,10 +48,7 @@ module.exports = {
         } else {
             try {
                 const data = await conexao.produto.findAll();
-                return res.json([
-                    data
-                ]
-                );
+                return res.json(data);
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",
@@ -69,9 +64,7 @@ module.exports = {
         try {
             let data = await conexao.produto.findOne({ where: { id } });
             if ((data))
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             else
                 return res.status(401).json({
                     msg: "Produto não cadastrado!"
@@ -110,9 +103,7 @@ module.exports = {
             let data = await conexao.produto.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.produto.update(req.body, { where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({
@@ -133,9 +124,7 @@ module.exports = {
             let data = await conexao.produto.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.produto.destroy({ where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({

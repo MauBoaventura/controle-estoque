@@ -62,9 +62,7 @@ module.exports = {
                     }]
                 });
                 if ((data))
-                    return res.status(200).json({
-                        data
-                    })
+                    return res.status(200).json(data)
                 else
                     return res.status(401).json({
                         msg: "Pedido não cadastrado!"
@@ -85,10 +83,7 @@ module.exports = {
                         required: true
                     }]
                 });
-                return res.json([
-                    data
-                ]
-                );
+                return res.json(data);
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",
@@ -104,9 +99,7 @@ module.exports = {
         try {
             let data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
             if ((data))
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             else
                 return res.status(401).json({
                     msg: "Pedido não cadastrado!"
@@ -145,9 +138,7 @@ module.exports = {
             let data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.pedidos_fornecedor.update(req.body, { where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({
@@ -168,9 +159,7 @@ module.exports = {
             let data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.pedidos_fornecedor.destroy({ where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({

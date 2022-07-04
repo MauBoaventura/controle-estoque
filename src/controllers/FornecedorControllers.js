@@ -17,9 +17,7 @@ module.exports = {
                     }
                 });
                 if ((data))
-                    return res.status(200).json({
-                        data
-                    })
+                    return res.status(200).json(data)
                 else
                     return res.status(401).json({
                         msg: "Fornecedor não cadastrado!"
@@ -43,10 +41,7 @@ module.exports = {
         }
 
 
-        res.json([
-            data
-        ]
-        )
+        res.json(data)
     },
 
     async getOne(req, res) {
@@ -55,9 +50,7 @@ module.exports = {
         try {
             let data = await conexao.fornecedor.findOne({ where: { id } });
             if ((data))
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             else
                 return res.status(401).json({
                     msg: "Fornecedor não cadastrado!"
@@ -97,9 +90,7 @@ module.exports = {
             let data = await conexao.fornecedor.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.fornecedor.update(req.body, { where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({
@@ -120,9 +111,7 @@ module.exports = {
             let data = await conexao.fornecedor.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.fornecedor.destroy({ where: { id } });
-                return res.status(200).json({
-                    data
-                })
+                return res.status(200).json(data)
             }
             else
                 return res.status(401).json({
