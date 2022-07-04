@@ -54,7 +54,12 @@ module.exports = {
                         total_recebido: {
                             [Op.like]: `%${total_recebido}%`
                         },
-                    }
+                    },
+                    include: [{
+                        association: "fornecedor",
+                        attributes: ['id', 'nome'],
+                        required: true
+                    }]
                 });
                 if ((data))
                     return res.status(200).json({
@@ -73,7 +78,13 @@ module.exports = {
             }
         } else {
             try {
-                const data = await conexao.pedidos_fornecedor.findAll();
+                const data = await conexao.pedidos_fornecedor.findAll({
+                    include: [{
+                        association: "fornecedor",
+                        attributes: ['id', 'nome'],
+                        required: true
+                    }]
+                });
                 return res.json([
                     data
                 ]
