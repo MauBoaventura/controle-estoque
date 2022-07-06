@@ -77,11 +77,7 @@ module.exports = {
         } else {
             try {
                 const data = await conexao.pedidos_fornecedor.findAll({
-                    include: [{
-                        association: "fornecedor",
-                        attributes: ['id', 'nome'],
-                        required: true
-                    }]
+                    include: [{ all: true }]
                 });
                 return res.json(data);
             } catch (error) {
