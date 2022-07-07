@@ -42,5 +42,7 @@ routes.post('/api/pedido', PedidoControllers.create)
 routes.put('/api/pedido/:id', PedidoControllers.update)
 routes.delete('/api/pedido/:id', PedidoControllers.delete)
 
+routes.get('/api/lastpedido', PedidoControllers.last_lote_of_pedidos)
+
 
 module.exports = routes

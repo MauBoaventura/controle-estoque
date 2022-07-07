@@ -168,6 +168,26 @@ module.exports = {
                 error
             })
         }
+    },
+
+    async last_lote_of_pedidos(req, res) {
+        const id = req.params.id;
+
+        try {
+            let data = await conexao.pedidos_fornecedor.max('lote')
+            if ((data))
+                return res.status(200).json(data)
+            else
+                return res.status(401).json({
+                    msg: "Pedido não cadastrado!"
+                })
+
+        } catch (error) {
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
+        }
     }
 
 };
