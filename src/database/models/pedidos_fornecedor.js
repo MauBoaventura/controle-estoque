@@ -60,13 +60,13 @@ class pedidos_fornecedor extends Sequelize.Model {
         key: 'id'
       }
     },
-    total_nota: {
+    taxa_transporte_produto_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    total_recebido: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'taxa_transporte_produto',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
@@ -101,6 +101,13 @@ class pedidos_fornecedor extends Sequelize.Model {
         using: "BTREE",
         fields: [
           { name: "freteiro_id" },
+        ]
+      },
+      {
+        name: "FK_pedidos_fornecedor_taxa_transporte_produto_id",
+        using: "BTREE",
+        fields: [
+          { name: "taxa_transporte_produto_id" },
         ]
       },
     ]

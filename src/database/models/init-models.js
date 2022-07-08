@@ -22,6 +22,8 @@ function initModels(sequelize) {
   produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "produto_id"});
   taxa_transporte_produto.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
   produto.hasMany(taxa_transporte_produto, { as: "taxa_transporte_produtos", foreignKey: "produto_id"});
+  pedidos_fornecedor.belongsTo(taxa_transporte_produto, { as: "taxa_transporte_produto", foreignKey: "taxa_transporte_produto_id"});
+  taxa_transporte_produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "taxa_transporte_produto_id"});
 
   return {
     fornecedor,
