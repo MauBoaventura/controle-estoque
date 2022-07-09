@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 
 module.exports = {
     async index(req, res) {
-        if (!Object.keys(req.query).length === 0) {
+        if (!(Object.keys(req.query).length === 0)) {
             const data_pedido = req.query.data_pedido ?? "";
             const lote = req.query.lote ?? "";
             const fornecedor_id = req.query.fornecedor_id ?? "";
@@ -55,11 +55,7 @@ module.exports = {
                             [Op.like]: `%${total_recebido}%`
                         },
                     },
-                    include: [{
-                        association: "fornecedor",
-                        attributes: ['id', 'nome'],
-                        required: true
-                    }]
+                    include: [{ all: true }]
                 });
                 if ((data))
                     return res.status(200).json(data)
@@ -79,7 +75,12 @@ module.exports = {
                 const data = await conexao.pedidos_fornecedor.findAll({
                     include: [{ all: true }]
                 });
-                return res.json(data);
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Pedido não cadastrado!"
+                    })
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",

@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 
 module.exports = {
     async index(req, res) {
-        if (req.query) {
+        if (!(Object.keys(req.query).length === 0)) {
             const nome = req.query.nome ?? "";
             try {
                 let data = await conexao.fornecedor.findAll({
@@ -32,6 +32,12 @@ module.exports = {
         } else {
             try {
                 let data = await conexao.fornecedor.findAll();
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Fornecedor não cadastrado!"
+                    })
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",

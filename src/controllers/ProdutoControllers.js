@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 
 module.exports = {
     async index(req, res) {
-        if (!Object.keys(req.query).length === 0) {
+        if (!(Object.keys(req.query).length === 0)) {
             const marca = req.query.marca ?? "";
             const modelo = req.query.modelo ?? "";
             const cor = req.query.cor ?? "";
@@ -48,7 +48,12 @@ module.exports = {
         } else {
             try {
                 const data = await conexao.produto.findAll();
-                return res.json(data);
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Pedido não cadastrado!"
+                    })
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",

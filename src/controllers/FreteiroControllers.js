@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 
 module.exports = {
     async index(req, res) {
-        if (req.query) {
+        if (!(Object.keys(req.query).length === 0)) {
             const nome = req.query.nome ?? "";
             try {
                 let data = await conexao.freteiro.findAll({
@@ -32,6 +32,14 @@ module.exports = {
         } else {
             try {
                 let data = await conexao.freteiro.findAll();
+
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Freteiro não cadastrado!"
+                    })
+
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",
@@ -40,8 +48,6 @@ module.exports = {
             }
         }
 
-
-        res.json(data)
     },
 
     async getOne(req, res) {
@@ -112,7 +118,7 @@ module.exports = {
             let data = await conexao.freteiro.findOne({ where: { id } });
             if ((data)) {
                 data = await conexao.freteiro.destroy({ where: { id } });
-                return res.status(200).json(data)
+                return res.status(204).json(data)
             }
             else
                 return res.status(401).json({

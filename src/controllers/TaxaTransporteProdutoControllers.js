@@ -6,18 +6,14 @@ const Op = Sequelize.Op;
 
 module.exports = {
     async index(req, res) {
-        if (!Object.keys(req.query).length === 0) {
+        if (!(Object.keys(req.query).length === 0)) {
             const freteiro_id = req.query.freteiro_id ?? "";
             const produto_id = req.query.produto_id ?? "";
             try {
-                let data = await conexao.taxa_transporte_produto.findAll({
+                let data = await conexao.taxa_transporte_produto.findOne({
                     where: {
-                        freteiro_id: {
-                            [Op.like]: `%${freteiro_id}%`
-                        },
-                        produto_id: {
-                            [Op.like]: `%${produto_id}%`
-                        }
+                        freteiro_id,
+                        produto_id
                     }
                 });
                 if ((data))
@@ -36,7 +32,12 @@ module.exports = {
         } else {
             try {
                 const data = await conexao.taxa_transporte_produto.findAll();
-                return res.json(data);
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Taxa não cadastrada!"
+                    })
             } catch (error) {
                 return res.status(401).json({
                     msg: "Ocoreu um erro!",
@@ -69,11 +70,12 @@ module.exports = {
     async create(req, res) {
         try {
             // remove taxa ao pesquisar, deixando apenas id do freteiro e produto
+            const taxa = req.body['taxa']
             delete req.body['taxa'];
 
             let data = await conexao.taxa_transporte_produto.findAll({ where: req.body });
             if (!(data.length > 0))
-                await conexao.taxa_transporte_produto.create(req.body);
+                await conexao.taxa_transporte_produto.create({ ...req.body, taxa });
             else
                 return res.status(401).json({
                     msg: "Taxa já cadastrada!"
