@@ -113,8 +113,16 @@ module.exports = {
     async create(req, res) {
         try {
             let data = await conexao.pedidos_fornecedor.findAll({ where: req.body });
-            if (!(data.length > 0))
+            if (!(data.length > 0)) {
+                const resp = await conexao.taxa_transporte_produto.findOne({
+                    where: {
+                        freteiro_id: req.body.freteiro_id,
+                        produto_id: req.body.produto_id
+                    }
+                })
+                req.body.taxa_transporte_produto_id = resp.id ?? null;
                 await conexao.pedidos_fornecedor.create(req.body);
+            }
             else
                 return res.status(401).json({
                     msg: "Pedido já cadastrado!"

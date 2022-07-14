@@ -14,7 +14,9 @@ module.exports = {
                     where: {
                         freteiro_id,
                         produto_id
-                    }
+                    },
+                    include: [{ all: true }]
+
                 });
                 if ((data))
                     return res.status(200).json(data)
@@ -31,7 +33,12 @@ module.exports = {
             }
         } else {
             try {
-                const data = await conexao.taxa_transporte_produto.findAll();
+                const data = await conexao.taxa_transporte_produto.findAll(
+                    {
+                        include: [{ all: true }]
+
+                    }
+                );
                 if ((data))
                     return res.status(200).json(data)
                 else
