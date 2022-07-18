@@ -2,6 +2,7 @@ const connection = require('../database/connection');
 const models = require("../database/models/init-models");
 const conexao = models(connection);
 const Sequelize = require('sequelize');
+const { where } = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -112,22 +113,22 @@ module.exports = {
 
     async create(req, res) {
         try {
-            let data = await conexao.pedidos_fornecedor.findAll({ where: req.body });
-            if (!(data.length > 0)) {
+            req.body.produtos.map(async (produto) => {
                 const resp = await conexao.taxa_transporte_produto.findOne({
                     where: {
-                        freteiro_id: req.body.freteiro_id,
-                        produto_id: req.body.produto_id
+                        freteiro_id: produto.freteiro_id,
+                        produto_id: produto.produto_id
                     }
                 })
-                req.body.taxa_transporte_produto_id = resp.id ?? null;
-                await conexao.pedidos_fornecedor.create(req.body);
-            }
-            else
-                return res.status(401).json({
-                    msg: "Pedido já cadastrado!"
-                })
+                produto.taxa_transporte_produto_id = resp?.id ?? undefined;
 
+                produto.data_pedido = req.body.data_pedido;
+                produto.dolar_compra = req.body.dolar_compra;
+                produto.fornecedor_id = req.body.fornecedor_id;
+                produto.lote = req.body.lote;
+
+                await conexao.pedidos_fornecedor.create(produto);
+            })
         } catch (error) {
             return res.status(401).json({
                 msg: "Ocoreu um erro!",
@@ -141,8 +142,15 @@ module.exports = {
         const id = req.params.id;
         try {
             let data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
+            
             if ((data)) {
-                data = await conexao.pedidos_fornecedor.update(req.body, { where: { id } });
+                const quantidade_solicitada = data?.quantidade_solicitada;
+                const quantidade_recebida = req.body.quantidade_recebida;
+                
+                await conexao.pedidos_fornecedor.update(req.body, { where: { id } });
+                data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
+
+
                 return res.status(200).json(data)
             }
             else

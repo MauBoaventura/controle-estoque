@@ -28,22 +28,6 @@ class pedidos_fornecedor extends Sequelize.Model {
         key: 'id'
       }
     },
-    dolar_compra: {
-      type: DataTypes.DECIMAL(7,2),
-      allowNull: true
-    },
-    quantidade_solicitada: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    valor_produto: {
-      type: DataTypes.DECIMAL(7,2),
-      allowNull: true
-    },
-    quantidade_recebida: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     produto_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -67,6 +51,26 @@ class pedidos_fornecedor extends Sequelize.Model {
         model: 'taxa_transporte_produto',
         key: 'id'
       }
+    },
+    dolar_compra: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
+    },
+    quantidade_solicitada: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0
+    },
+    valor_produto: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
+    },
+    quantidade_recebida: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0
     }
   }, {
     sequelize,

@@ -21,7 +21,7 @@ module.exports = {
                 if ((data))
                     return res.status(200).json(data)
                 else
-                    return res.status(401).json({
+                    return res.status(205).json({
                         msg: "Taxa não cadastrada!"
                     })
 
