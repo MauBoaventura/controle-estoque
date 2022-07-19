@@ -142,14 +142,38 @@ module.exports = {
         const id = req.params.id;
         try {
             let data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
-            
+
             if ((data)) {
-                const quantidade_solicitada = data?.quantidade_solicitada;
-                const quantidade_recebida = req.body.quantidade_recebida;
-                
+                const quantidade_solicitada = data?.quantidade_solicitada;//5
+                const quantidade_ja_recebida = data?.quantidade_recebida;//0
+                const quantidade_recebida_da_vez = data?.quantidade_solicitada - req.body.quantidade_recebida;//5-2=3
+
+                const quantidade_que_falta_receber = quantidade_solicitada - quantidade_ja_recebida;//5-0
+
+                if (quantidade_recebida_da_vez > quantidade_que_falta_receber) {// 3 maior q 5
+                    return res.status(401).json({
+                        msg: "Quantidade de produtos maior que a permitida!"
+                    })
+                }
+                else {
+                    if (quantidade_recebida_da_vez < 0) {
+                        return res.status(401).json({
+                            msg: "Quantidade negativa!"
+                        })
+                    }
+                    // cadastra 
+                    const quantidade_de_produtos_a_ser_adicionado = req.body.quantidade_recebida - quantidade_ja_recebida
+
+                    for (let index = 0; index < quantidade_de_produtos_a_ser_adicionado; index++) {
+                        conexao.estoque.create({
+                            data_recebimento:  new Date().toJSON().slice(0, 10),
+                            pedidos_fornecedor_id: data.id,
+                        }) 
+                    }   
+                }
+
                 await conexao.pedidos_fornecedor.update(req.body, { where: { id } });
                 data = await conexao.pedidos_fornecedor.findOne({ where: { id } });
-
 
                 return res.status(200).json(data)
             }
