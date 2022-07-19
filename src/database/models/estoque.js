@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return produto_recebido.init(sequelize, DataTypes);
+  return estoque.init(sequelize, DataTypes);
 }
 
-class produto_recebido extends Sequelize.Model {
+class estoque extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   return super.init({
     id: {
@@ -28,10 +28,15 @@ class produto_recebido extends Sequelize.Model {
       type: DataTypes.DOUBLE(7,2),
       allowNull: true,
       defaultValue: 0.00
+    },
+    desconto: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
     }
   }, {
     sequelize,
-    tableName: 'produto_recebido',
+    tableName: 'estoque',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -44,7 +49,7 @@ class produto_recebido extends Sequelize.Model {
         ]
       },
       {
-        name: "FK_produto_recebido_pedidos_fornecedor_id",
+        name: "FK_estoque_pedidos_fornecedor_id",
         using: "BTREE",
         fields: [
           { name: "pedidos_fornecedor_id" },
