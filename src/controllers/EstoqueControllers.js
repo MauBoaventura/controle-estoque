@@ -16,6 +16,7 @@ module.exports = {
                             '*',
                             'id',
                             'pedidos_fornecedor_id',
+                            'valor_venda',
                             [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
                     ],
                         include: [{
