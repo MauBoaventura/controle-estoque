@@ -1,7 +1,15 @@
 const express = require('express')
-const {FreteiroControllers, FornecedorControllers, ProdutoControllers,TaxaTransporteProdutoControllers,PedidoControllers}   = require('../controllers')
-
 const routes = express.Router()
+
+const {
+    FreteiroControllers,
+    FornecedorControllers,
+    ProdutoControllers,
+    TaxaTransporteProdutoControllers,
+    PedidoControllers ,
+    EstoqueControllers ,
+} = require('../controllers')
+
 
 routes.get('/', (req, res) => {
     res.send('Controle-estoque online!');
@@ -34,6 +42,14 @@ routes.get('/api/taxa/:id', TaxaTransporteProdutoControllers.getOne)
 routes.post('/api/taxa', TaxaTransporteProdutoControllers.create)
 routes.put('/api/taxa/:id', TaxaTransporteProdutoControllers.update)
 routes.delete('/api/taxa/:id', TaxaTransporteProdutoControllers.delete)
+
+// Estoque
+routes.get('/api/estoque', EstoqueControllers.index)
+routes.get('/api/estoque/:id', EstoqueControllers.getOne)
+routes.post('/api/estoque', EstoqueControllers.create)
+routes.put('/api/estoque/', EstoqueControllers.update)
+routes.put('/api/estoque/:id', EstoqueControllers.update)
+routes.delete('/api/estoque/:id', EstoqueControllers.delete)
 
 // Pedido
 routes.get('/api/pedido', PedidoControllers.index)
