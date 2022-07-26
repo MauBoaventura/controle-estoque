@@ -18,15 +18,15 @@ module.exports = {
                             'pedidos_fornecedor_id',
                             'valor_venda',
                             [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
-                    ],
+                        ],
                         include: [{
                             association: "pedidos_fornecedor",
                             include: [{
-                                association:"produto"
+                                association: "produto"
                             }]
 
                         }],
-                        group:['pedidos_fornecedor.produto_id', 'pedidos_fornecedor.lote']
+                        group: ['pedidos_fornecedor.produto_id', 'pedidos_fornecedor.lote']
                     });
                     if ((data))
                         return res.status(200).json(data)
@@ -132,13 +132,18 @@ module.exports = {
         const id = req.params.id;
         if (!(Object.keys(req.query).length === 0)) {
             const pedidos_fornecedor_id = req.query.pedidos_fornecedor_id ?? "";
-
-            let data = await conexao.estoque.update(req.body, { where: { pedidos_fornecedor_id } });
-
-            return res.status(200).json(data)
-
+            try {
+                let data = await conexao.estoque.update(req.body, { where: { pedidos_fornecedor_id } });
+                return res.status(200).json(data)
+            } catch (error) {
+                console.log(error)
+                return res.status(401).json({
+                    msg: "Ocoreu um erro!",
+                    error
+                })
+            }
         }
-        
+
         try {
             let data = await conexao.estoque.findOne({ where: { id } });
             if ((data)) {
