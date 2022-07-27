@@ -168,6 +168,8 @@ module.exports = {
         try {
             let data = await conexao.estoque.findOne({ where: { id } });
             if ((data)) {
+                let pedido = await conexao.pedidos_fornecedor.findByPk(data.pedidos_fornecedor_id);
+                await conexao.pedidos_fornecedor.update({ quantidade_recebida: pedido.quantidade_recebida - 1 }, { where: { id: data.pedidos_fornecedor_id } });
                 data = await conexao.estoque.destroy({ where: { id } });
                 return res.status(200).json(data)
             }
