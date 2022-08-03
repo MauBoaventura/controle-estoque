@@ -16,7 +16,7 @@ class pedidos_fornecedor extends Sequelize.Model {
       type: DataTypes.DATE,
       allowNull: true
     },
-    lote: {
+    nota: {
       type: DataTypes.INTEGER,
       allowNull: true
     },

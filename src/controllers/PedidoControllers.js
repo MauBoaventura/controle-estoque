@@ -9,7 +9,7 @@ module.exports = {
     async index(req, res) {
         if (!(Object.keys(req.query).length === 0)) {
             const data_pedido = req.query.data_pedido ?? "";
-            const lote = req.query.lote ?? "";
+            const nota = req.query.nota ?? "";
             const fornecedor_id = req.query.fornecedor_id ?? "";
             const dolar_compra = req.query.dolar_compra ?? "";
             const quantidade_solicitada = req.query.quantidade_solicitada ?? "";
@@ -25,8 +25,8 @@ module.exports = {
                         data_pedido: {
                             [Op.like]: `%${data_pedido}%`
                         },
-                        lote: {
-                            [Op.like]: `%${lote}%`
+                        nota: {
+                            [Op.like]: `%${nota}%`
                         },
                         fornecedor_id: {
                             [Op.like]: `%${fornecedor_id}%`
@@ -125,7 +125,7 @@ module.exports = {
                 produto.data_pedido = req.body.data_pedido;
                 produto.dolar_compra = req.body.dolar_compra;
                 produto.fornecedor_id = req.body.fornecedor_id;
-                produto.lote = req.body.lote;
+                produto.nota = req.body.nota;
 
                 await conexao.pedidos_fornecedor.create(produto);
             })
@@ -211,11 +211,11 @@ module.exports = {
         }
     },
 
-    async last_lote_of_pedidos(req, res) {
+    async last_nota_of_pedidos(req, res) {
         const id = req.params.id;
 
         try {
-            let data = await conexao.pedidos_fornecedor.max('lote')
+            let data = await conexao.pedidos_fornecedor.max('nota')
             if ((data))
                 return res.status(200).json(data)
             else
