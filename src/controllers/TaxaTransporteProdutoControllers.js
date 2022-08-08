@@ -7,15 +7,15 @@ const Op = Sequelize.Op;
 module.exports = {
     async index(req, res) {
         if (!(Object.keys(req.query).length === 0)) {
-            const freteiro_id = req.query.freteiro_id ?? "";
+            // const freteiro_id = req.query.freteiro_id ?? "";
             const produto_id = req.query.produto_id ?? "";
             try {
                 let data = await conexao.taxa_transporte_produto.findOne({
                     where: {
-                        freteiro_id,
+                        // freteiro_id,
                         produto_id
                     },
-                    include: [{ all: true }]
+                    // include: [{ all: true }]
 
                 });
                 if ((data))
@@ -35,7 +35,7 @@ module.exports = {
             try {
                 const data = await conexao.taxa_transporte_produto.findAll(
                     {
-                        include: [{ all: true }]
+                        // include: [{ all: true }]
 
                     }
                 );

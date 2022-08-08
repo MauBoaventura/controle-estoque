@@ -59,6 +59,7 @@ routes.put('/api/pedido/:id', PedidoControllers.update)
 routes.delete('/api/pedido/:id', PedidoControllers.delete)
 
 routes.get('/api/lastpedido', PedidoControllers.last_nota_of_pedidos)
+routes.get('/api/pedidobynota', PedidoControllers.groupNota)
 
 
 module.exports = routes

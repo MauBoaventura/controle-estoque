@@ -116,7 +116,7 @@ module.exports = {
             req.body.produtos.map(async (produto) => {
                 const resp = await conexao.taxa_transporte_produto.findOne({
                     where: {
-                        freteiro_id: produto.freteiro_id,
+                        // freteiro_id: produto.freteiro_id,
                         produto_id: produto.produto_id
                     }
                 })
@@ -124,6 +124,7 @@ module.exports = {
 
                 produto.data_pedido = req.body.data_pedido;
                 produto.dolar_compra = req.body.dolar_compra;
+                produto.freteiro_id = req.body.freteiro_id;
                 produto.fornecedor_id = req.body.fornecedor_id;
                 produto.nota = req.body.nota;
 
@@ -219,9 +220,7 @@ module.exports = {
             if ((data))
                 return res.status(200).json(data)
             else
-                return res.status(401).json({
-                    msg: "Pedido não cadastrado!"
-                })
+                return res.status(200).json(0)
 
         } catch (error) {
             return res.status(401).json({
@@ -229,6 +228,101 @@ module.exports = {
                 error
             })
         }
-    }
+    },
+
+    async groupNota(req, res) {
+        if (!(Object.keys(req.query).length === 0)) {
+            const data_pedido = req.query.data_pedido ?? "";
+            const nota = req.query.nota ?? "";
+            const fornecedor_id = req.query.fornecedor_id ?? "";
+            const dolar_compra = req.query.dolar_compra ?? "";
+            const quantidade_solicitada = req.query.quantidade_solicitada ?? "";
+            const valor_produto = req.query.valor_produto ?? "";
+            const quantidade_recebida = req.query.quantidade_recebida ?? "";
+            const produto_id = req.query.produto_id ?? "";
+            const freteiro_id = req.query.freteiro_id ?? "";
+            const total_nota = req.query.total_nota ?? "";
+            const total_recebido = req.query.total_recebido ?? "";
+            try {
+                let data = await conexao.pedidos_fornecedor.findAll({
+                    where: {
+                        data_pedido: {
+                            [Op.like]: `%${data_pedido}%`
+                        },
+                        nota: {
+                            [Op.like]: `%${nota}%`
+                        },
+                        fornecedor_id: {
+                            [Op.like]: `%${fornecedor_id}%`
+                        },
+                        dolar_compra: {
+                            [Op.like]: `%${dolar_compra}%`
+                        },
+                        quantidade_solicitada: {
+                            [Op.like]: `%${quantidade_solicitada}%`
+                        },
+                        valor_produto: {
+                            [Op.like]: `%${valor_produto}%`
+                        },
+                        quantidade_recebida: {
+                            [Op.like]: `%${quantidade_recebida}%`
+                        },
+                        produto_id: {
+                            [Op.like]: `%${produto_id}%`
+                        },
+                        freteiro_id: {
+                            [Op.like]: `%${freteiro_id}%`
+                        },
+                        total_nota: {
+                            [Op.like]: `%${total_nota}%`
+                        },
+                        total_recebido: {
+                            [Op.like]: `%${total_recebido}%`
+                        },
+                    },
+                    include: [{ all: true }]
+                });
+                if ((data))
+                    return res.status(200).json(data)
+                else
+                    return res.status(401).json({
+                        msg: "Pedido não cadastrado!"
+                    })
+
+            } catch (error) {
+                return res.status(401).json({
+                    msg: "Ocoreu um erro!",
+                    error
+                })
+            }
+        } else {
+            try {
+                const data = await conexao.pedidos_fornecedor.findAll({
+                    include: [{ all: true }]
+                });
+                if ((data)){
+                    const grouped = groupBy(data, 'nota')
+                    return res.status(200).json(grouped)
+                }
+                else
+                    return res.status(401).json({
+                        msg: "Pedido não cadastrado!"
+                    })
+            } catch (error) {
+                return res.status(401).json({
+                    msg: "Ocoreu um erro!",
+                    error
+                })
+            }
+        }
+    },
 
 };
+
+function groupBy (array=[], key) {
+	return array.reduce((acc, item) => ({
+      ...acc,
+      [item[key]]: [...(acc[item[key]] ?? []), item],
+    }),
+  {})
+}
