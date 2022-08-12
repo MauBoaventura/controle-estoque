@@ -6,6 +6,7 @@ const _freteiro = require("./freteiro");
 const _pedidos_fornecedor = require("./pedidos_fornecedor");
 const _produto = require("./produto");
 const _taxa_transporte_produto = require("./taxa_transporte_produto");
+const _venda = require("./venda");
 
 function initModels(sequelize) {
   const cliente_final = _cliente_final(sequelize, DataTypes);
@@ -15,7 +16,12 @@ function initModels(sequelize) {
   const pedidos_fornecedor = _pedidos_fornecedor(sequelize, DataTypes);
   const produto = _produto(sequelize, DataTypes);
   const taxa_transporte_produto = _taxa_transporte_produto(sequelize, DataTypes);
+  const venda = _venda(sequelize, DataTypes);
 
+  venda.belongsTo(cliente_final, { as: "cliente_final", foreignKey: "cliente_final_id"});
+  cliente_final.hasMany(venda, { as: "vendas", foreignKey: "cliente_final_id"});
+  venda.belongsTo(estoque, { as: "estoque", foreignKey: "estoque_id"});
+  estoque.hasMany(venda, { as: "vendas", foreignKey: "estoque_id"});
   pedidos_fornecedor.belongsTo(fornecedor, { as: "fornecedor", foreignKey: "fornecedor_id"});
   fornecedor.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "fornecedor_id"});
   pedidos_fornecedor.belongsTo(freteiro, { as: "freteiro", foreignKey: "freteiro_id"});
@@ -28,6 +34,8 @@ function initModels(sequelize) {
   produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "produto_id"});
   taxa_transporte_produto.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
   produto.hasMany(taxa_transporte_produto, { as: "taxa_transporte_produtos", foreignKey: "produto_id"});
+  venda.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
+  produto.hasMany(venda, { as: "vendas", foreignKey: "produto_id"});
   pedidos_fornecedor.belongsTo(taxa_transporte_produto, { as: "taxa_transporte_produto", foreignKey: "taxa_transporte_produto_id"});
   taxa_transporte_produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "taxa_transporte_produto_id"});
 
@@ -39,6 +47,7 @@ function initModels(sequelize) {
     pedidos_fornecedor,
     produto,
     taxa_transporte_produto,
+    venda,
   };
 }
 module.exports = initModels;
