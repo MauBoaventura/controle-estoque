@@ -31,6 +31,11 @@ class produto extends Sequelize.Model {
     ram: {
       type: DataTypes.STRING(100),
       allowNull: true
+    },
+    valor_transporte: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
     }
   }, {
     sequelize,
