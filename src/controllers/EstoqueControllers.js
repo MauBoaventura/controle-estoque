@@ -26,7 +26,7 @@ module.exports = {
                             }]
 
                         }],
-                        group: ['pedidos_fornecedor.produto_id', 'pedidos_fornecedor.nota']
+                        group: ['pedidos_fornecedor.produto_id']
                     });
                     if ((data))
                         return res.status(200).json(data)
