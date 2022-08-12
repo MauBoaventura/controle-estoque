@@ -1,4 +1,5 @@
 const DataTypes = require("sequelize").DataTypes;
+const _cliente_final = require("./cliente_final");
 const _estoque = require("./estoque");
 const _fornecedor = require("./fornecedor");
 const _freteiro = require("./freteiro");
@@ -7,6 +8,7 @@ const _produto = require("./produto");
 const _taxa_transporte_produto = require("./taxa_transporte_produto");
 
 function initModels(sequelize) {
+  const cliente_final = _cliente_final(sequelize, DataTypes);
   const estoque = _estoque(sequelize, DataTypes);
   const fornecedor = _fornecedor(sequelize, DataTypes);
   const freteiro = _freteiro(sequelize, DataTypes);
@@ -30,6 +32,7 @@ function initModels(sequelize) {
   taxa_transporte_produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "taxa_transporte_produto_id"});
 
   return {
+    cliente_final,
     estoque,
     fornecedor,
     freteiro,
