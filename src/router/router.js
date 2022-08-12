@@ -9,6 +9,7 @@ const {
     PedidoControllers ,
     EstoqueControllers ,
     ClienteControllers ,
+    VendaControllers ,
 } = require('../controllers')
 
 
@@ -69,6 +70,14 @@ routes.post('/api/cliente', ClienteControllers.create)
 routes.put('/api/cliente/', ClienteControllers.update)
 routes.put('/api/cliente/:id', ClienteControllers.update)
 routes.delete('/api/cliente/:id', ClienteControllers.delete)
+
+// Vendas
+routes.get('/api/venda', VendaControllers.index)
+routes.get('/api/venda/:id', VendaControllers.getOne)
+routes.post('/api/venda', VendaControllers.create)
+routes.put('/api/venda/', VendaControllers.update)
+routes.put('/api/venda/:id', VendaControllers.update)
+routes.delete('/api/venda/:id', VendaControllers.delete)
 
 
 module.exports = routes

@@ -5,6 +5,7 @@ const TaxaTransporteProdutoControllers = require('./TaxaTransporteProdutoControl
 const PedidoControllers = require('./PedidoControllers')
 const EstoqueControllers = require('./EstoqueControllers')
 const ClienteControllers = require('./ClienteControllers.js')
+const VendaControllers = require('./VendaControllers.js')
 
 module.exports = {
     FreteiroControllers,
@@ -14,4 +15,5 @@ module.exports = {
     PedidoControllers,
     EstoqueControllers,
     ClienteControllers,
+    VendaControllers,
 };
