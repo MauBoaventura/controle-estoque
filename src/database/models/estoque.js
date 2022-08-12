@@ -29,11 +29,6 @@ class estoque extends Sequelize.Model {
       allowNull: true,
       defaultValue: 0.00
     },
-    desconto: {
-      type: DataTypes.DOUBLE(7,2),
-      allowNull: true,
-      defaultValue: 0.00
-    },
     status_venda: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
