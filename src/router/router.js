@@ -8,6 +8,7 @@ const {
     TaxaTransporteProdutoControllers,
     PedidoControllers ,
     EstoqueControllers ,
+    ClienteControllers ,
 } = require('../controllers')
 
 
@@ -60,6 +61,14 @@ routes.delete('/api/pedido/:id', PedidoControllers.delete)
 
 routes.get('/api/lastpedido', PedidoControllers.last_nota_of_pedidos)
 routes.get('/api/pedidobynota', PedidoControllers.groupNota)
+
+// Cliente
+routes.get('/api/cliente', ClienteControllers.index)
+routes.get('/api/cliente/:id', ClienteControllers.getOne)
+routes.post('/api/cliente', ClienteControllers.create)
+routes.put('/api/cliente/', ClienteControllers.update)
+routes.put('/api/cliente/:id', ClienteControllers.update)
+routes.delete('/api/cliente/:id', ClienteControllers.delete)
 
 
 module.exports = routes
