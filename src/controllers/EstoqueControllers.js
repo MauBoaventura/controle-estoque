@@ -9,7 +9,40 @@ module.exports = {
         if (!(Object.keys(req.query).length === 0)) {
             const pedidos_fornecedor_id = req.query.pedidos_fornecedor_id ?? "";
             if (req.query?.group) {
-                // console.log(req.query.group)
+                const byNota = req.query.by_nota ?? "";
+                if (byNota) { 
+                    try {
+                        let data = await conexao.estoque.findAll({
+                            attributes: [
+                                '*',
+                                'id',
+                                'pedidos_fornecedor_id',
+                                'valor_venda',
+                                [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
+                            ],
+                            include: [{
+                                association: "pedidos_fornecedor",
+                                include: [{
+                                    association: "produto"
+                                }]
+    
+                            }],
+                            group: ['pedidos_fornecedor.produto_id', 'pedidos_fornecedor.nota']
+                        });
+                        if ((data))
+                            return res.status(200).json(data)
+                        else
+                            return res.status(205).json({
+                                msg: "Estoque não cadastrado!"
+                            })
+    
+                    } catch (error) {
+                        return res.status(401).json({
+                            msg: "Ocoreu um erro!",
+                            error
+                        })
+                    }
+                }else{
                 try {
                     let data = await conexao.estoque.findAll({
                         attributes: [
@@ -40,7 +73,7 @@ module.exports = {
                         msg: "Ocoreu um erro!",
                         error
                     })
-                }
+                }}
 
             } else
                 try {
