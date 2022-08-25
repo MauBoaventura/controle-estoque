@@ -165,10 +165,13 @@ module.exports = {
                     // cadastra 
                     const quantidade_de_produtos_a_ser_adicionado = req.body.quantidade_recebida - quantidade_ja_recebida
 
+                    const valorVenda = await conexao.estoque.findOne({ where: { pedidos_fornecedor_id: data.id } })
                     for (let index = 0; index < quantidade_de_produtos_a_ser_adicionado; index++) {
                         conexao.estoque.create({
                             data_recebimento:  new Date().toJSON().slice(0, 10),
                             pedidos_fornecedor_id: data.id,
+                            valor_venda: valorVenda?.valor_venda ?? 0
+
                         }) 
                     }   
                 }
