@@ -10,7 +10,7 @@ module.exports = {
             const pedidos_fornecedor_id = req.query.pedidos_fornecedor_id ?? "";
             if (req.query?.group) {
                 const byNota = req.query.by_nota ?? "";
-                if (byNota) { 
+                if (byNota) {
                     try {
                         let data = await conexao.estoque.findAll({
                             attributes: [
@@ -25,7 +25,12 @@ module.exports = {
                                 include: [{
                                     association: "produto"
                                 }]
-    
+                            },
+                            {
+                                association: "pedidos_fornecedor",
+                                include: [{
+                                    association: "taxa_transporte_produto"
+                                }]
                             }],
                             group: ['pedidos_fornecedor.produto_id', 'pedidos_fornecedor.nota']
                         });
@@ -42,38 +47,44 @@ module.exports = {
                             error
                         })
                     }
-                }else{
-                try {
-                    let data = await conexao.estoque.findAll({
-                        attributes: [
-                            '*',
-                            'id',
-                            'pedidos_fornecedor_id',
-                            'valor_venda',
-                            [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
-                        ],
-                        include: [{
-                            association: "pedidos_fornecedor",
+                } else {
+                    try {
+                        let data = await conexao.estoque.findAll({
+                            attributes: [
+                                '*',
+                                'id',
+                                'pedidos_fornecedor_id',
+                                'valor_venda',
+                                [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
+                            ],
                             include: [{
-                                association: "produto"
-                            }]
+                                association: "pedidos_fornecedor",
+                                include: [{
+                                    association: "produto"
+                                }]
+                            },
+                            {
+                                association: "pedidos_fornecedor",
+                                include: [{
+                                    association: "taxa_transporte_produto"
+                                }]
+                            }],
+                            group: ['pedidos_fornecedor.produto_id']
+                        });
+                        if ((data))
+                            return res.status(200).json(data)
+                        else
+                            return res.status(205).json({
+                                msg: "Estoque não cadastrado!"
+                            })
 
-                        }],
-                        group: ['pedidos_fornecedor.produto_id']
-                    });
-                    if ((data))
-                        return res.status(200).json(data)
-                    else
-                        return res.status(205).json({
-                            msg: "Estoque não cadastrado!"
+                    } catch (error) {
+                        return res.status(401).json({
+                            msg: "Ocoreu um erro!",
+                            error
                         })
-
-                } catch (error) {
-                    return res.status(401).json({
-                        msg: "Ocoreu um erro!",
-                        error
-                    })
-                }}
+                    }
+                }
 
             } else
                 try {
@@ -202,7 +213,7 @@ module.exports = {
         try {
             let data = await conexao.estoque.findOne({ where: { id } });
             if ((data)) {
-                let pedido = await conexao.pedidos_fornecedor.findByPk(data.pedidos_fornecedor_id,{paranoid: false});
+                let pedido = await conexao.pedidos_fornecedor.findByPk(data.pedidos_fornecedor_id, { paranoid: false });
                 await conexao.pedidos_fornecedor.update({ quantidade_recebida: pedido.quantidade_recebida - 1 }, { where: { id: data.pedidos_fornecedor_id } });
                 data = await conexao.estoque.destroy({ where: { id } });
                 return res.status(200).json(data)
@@ -218,6 +229,39 @@ module.exports = {
                 error
             })
         }
-    }
+    },
+
+    async groupbyproduto(req, res) {
+        try {
+            let data = await conexao.estoque.findAll({
+                attributes: [
+                    'id',
+                    'pedidos_fornecedor_id',
+                    'valor_venda',
+                ],
+                include: [{
+                    association: "pedidos_fornecedor",
+                    include: [{
+                        association: "produto"
+                    }]
+
+                }],
+                group: ['pedidos_fornecedor.nota']
+            });
+            if ((data))
+                return res.status(200).json(data)
+            else
+                return res.status(205).json({
+                    msg: "Estoque não cadastrado!"
+                })
+
+        } catch (error) {
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
+        }
+
+    },
 
 };

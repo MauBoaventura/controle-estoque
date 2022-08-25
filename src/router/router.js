@@ -53,6 +53,8 @@ routes.put('/api/estoque/', EstoqueControllers.update)
 routes.put('/api/estoque/:id', EstoqueControllers.update)
 routes.delete('/api/estoque/:id', EstoqueControllers.delete)
 
+routes.get('/api/estoquebyproduto/', EstoqueControllers.groupbyproduto)
+
 // Pedido
 routes.get('/api/pedido', PedidoControllers.index)
 routes.get('/api/pedido/:id', PedidoControllers.getOne)
