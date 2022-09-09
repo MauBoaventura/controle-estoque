@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return estoque.init(sequelize, DataTypes);
+  return produto_codigo_barras.init(sequelize, DataTypes);
 }
 
-class estoque extends Sequelize.Model {
+class produto_codigo_barras extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   return super.init({
     id: {
@@ -12,40 +12,21 @@ class estoque extends Sequelize.Model {
       allowNull: false,
       primaryKey: true
     },
-    data_recebimento: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    pedidos_fornecedor_id: {
+    produto_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'pedidos_fornecedor',
+        model: 'produto',
         key: 'id'
       }
     },
-    valor_venda: {
-      type: DataTypes.DOUBLE(7,2),
-      allowNull: true,
-      defaultValue: 0.00
-    },
-    status_venda: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: 0
-    },
-    status_consulta: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: 0
-    },
-    codigo_IMEI: {
+    codigo_barras: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'estoque',
+    tableName: 'produto_codigo_barras',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -58,10 +39,10 @@ class estoque extends Sequelize.Model {
         ]
       },
       {
-        name: "FK_estoque_pedidos_fornecedor_id",
+        name: "FK_produto_codigo_barras_produto_id",
         using: "BTREE",
         fields: [
-          { name: "pedidos_fornecedor_id" },
+          { name: "produto_id" },
         ]
       },
     ]

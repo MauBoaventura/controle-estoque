@@ -5,6 +5,7 @@ const _fornecedor = require("./fornecedor");
 const _freteiro = require("./freteiro");
 const _pedidos_fornecedor = require("./pedidos_fornecedor");
 const _produto = require("./produto");
+const _produto_codigo_barras = require("./produto_codigo_barras");
 const _taxa_transporte_produto = require("./taxa_transporte_produto");
 const _venda = require("./venda");
 
@@ -15,6 +16,7 @@ function initModels(sequelize) {
   const freteiro = _freteiro(sequelize, DataTypes);
   const pedidos_fornecedor = _pedidos_fornecedor(sequelize, DataTypes);
   const produto = _produto(sequelize, DataTypes);
+  const produto_codigo_barras = _produto_codigo_barras(sequelize, DataTypes);
   const taxa_transporte_produto = _taxa_transporte_produto(sequelize, DataTypes);
   const venda = _venda(sequelize, DataTypes);
 
@@ -32,6 +34,8 @@ function initModels(sequelize) {
   pedidos_fornecedor.hasMany(estoque, { as: "estoques", foreignKey: "pedidos_fornecedor_id"});
   pedidos_fornecedor.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
   produto.hasMany(pedidos_fornecedor, { as: "pedidos_fornecedors", foreignKey: "produto_id"});
+  produto_codigo_barras.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
+  produto.hasMany(produto_codigo_barras, { as: "produto_codigo_barras", foreignKey: "produto_id"});
   taxa_transporte_produto.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
   produto.hasMany(taxa_transporte_produto, { as: "taxa_transporte_produtos", foreignKey: "produto_id"});
   venda.belongsTo(produto, { as: "produto", foreignKey: "produto_id"});
@@ -46,6 +50,7 @@ function initModels(sequelize) {
     freteiro,
     pedidos_fornecedor,
     produto,
+    produto_codigo_barras,
     taxa_transporte_produto,
     venda,
   };
