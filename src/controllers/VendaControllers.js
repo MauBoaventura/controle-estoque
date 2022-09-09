@@ -13,7 +13,7 @@ module.exports = {
                     where: {
                         cliente_final_id
                     },
-                    include:[{ all: true }]
+                    include: [{ all: true }]
                 });
                 if ((data))
                     return res.status(200).json(data)
@@ -139,7 +139,7 @@ module.exports = {
         try {
             let data = await conexao.estoque.findOne(
                 {
-                    where:{
+                    where: {
                         status_consulta: false,
                         status_venda: false
                     },
@@ -149,7 +149,7 @@ module.exports = {
                             association: "produto",
                             include: [{
                                 association: "produto_codigo_barras",
-                                where:{
+                                where: {
                                     'codigo_barras': cod
                                 },
                                 required: true
@@ -158,11 +158,11 @@ module.exports = {
                         }],
                         required: true
                     },
-                ],
+                    ],
                 });
-                if(data?.id){
-                    await conexao.estoque.update({ ...data, status_consulta: true }, { where: { id: data.id } });
-                }
+            if (data?.id) {
+                await conexao.estoque.update({ ...data, status_consulta: true }, { where: { id: data.id } });
+            }
             return res.status(200).json(data ?? {})
         } catch (error) {
             console.log(error)
@@ -171,5 +171,26 @@ module.exports = {
                 error
             })
         }
-    }
+    },
+
+    async estoqueLimpaConsulta(req, res) {
+        const cod = req.query.cod;
+        try {
+            await conexao.estoque.update({ status_consulta: false }, {
+                where: {
+                    deletedAt: {
+                        [Op.is]: null
+                    },
+                }
+            });
+
+            return res.status(200).json({ msg: 'DB consulta limpo com sucesso' })
+        } catch (error) {
+            console.log(error)
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
+        }
+    },
 };
