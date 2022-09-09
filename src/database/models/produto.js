@@ -12,10 +12,6 @@ class produto extends Sequelize.Model {
       allowNull: false,
       primaryKey: true
     },
-    codigoBar: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
     marca: {
       type: DataTypes.STRING(100),
       allowNull: false
