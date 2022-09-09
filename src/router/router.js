@@ -81,5 +81,6 @@ routes.put('/api/venda/', VendaControllers.update)
 routes.put('/api/venda/:id', VendaControllers.update)
 routes.delete('/api/venda/:id', VendaControllers.delete)
 
+routes.get('/api/vendabycod/', VendaControllers.searchCodBar)
 
 module.exports = routes

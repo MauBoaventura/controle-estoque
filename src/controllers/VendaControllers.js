@@ -132,6 +132,44 @@ module.exports = {
                 error
             })
         }
-    }
+    },
 
+    async searchCodBar(req, res) {
+        const cod = req.query.cod;
+        try {
+            let data = await conexao.estoque.findOne(
+                {
+                    where:{
+                        status_consulta: false,
+                        status_venda: false
+                    },
+                    include: [{
+                        association: "pedidos_fornecedor",
+                        include: [{
+                            association: "produto",
+                            include: [{
+                                association: "produto_codigo_barras",
+                                where:{
+                                    'codigo_barras': cod
+                                },
+                                required: true
+                            }],
+                            required: true
+                        }],
+                        required: true
+                    },
+                ],
+                });
+                if(data?.id){
+                    await conexao.estoque.update({ ...data, status_consulta: true }, { where: { id: data.id } });
+                }
+            return res.status(200).json(data ?? {})
+        } catch (error) {
+            console.log(error)
+            return res.status(401).json({
+                msg: "Ocoreu um erro!",
+                error
+            })
+        }
+    }
 };
