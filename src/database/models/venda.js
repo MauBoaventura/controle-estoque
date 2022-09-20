@@ -44,6 +44,21 @@ class venda extends Sequelize.Model {
       type: DataTypes.DOUBLE(7,2),
       allowNull: true,
       defaultValue: 0.00
+    },
+    valor_venda_final: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
+    },
+    valor_lucro_da_peca_final: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
+    },
+    valor_gastos_final: {
+      type: DataTypes.DOUBLE(7,2),
+      allowNull: true,
+      defaultValue: 0.00
     }
   }, {
     sequelize,

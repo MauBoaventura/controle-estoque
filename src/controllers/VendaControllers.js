@@ -74,15 +74,28 @@ module.exports = {
 
     async create(req, res) {
         try {
-            let data = await conexao.venda.findAll({ where: { cliente_final_id: req.body.cliente_final_id } });
-            if (!(data.length > 0)) {
-                await conexao.venda.create(req.body);
-            }
-            else
-                return res.status(401).json({
-                    msg: "Venda já cadastrada!"
-                })
+            req.body.produtos.map(async (venda) => {
+                let venda1={}
+                venda1.data_venda = req.body.data_pedido;
+                venda1.cliente_final_id = req.body.cliente_final_id;
+                venda1.estoque_id = venda.id;
+                venda1.produto_id = venda.pedidos_fornecedor.produto.id;
+                venda1.valor_desconto = venda.desconto;
+                venda1.valor_venda_final = venda.valor_venda - venda.desconto;
 
+                const resp = await conexao.taxa_transporte_produto.findOne({
+                    where: {
+                        produto_id: venda.pedidos_fornecedor.produto.id
+                    }
+                })
+                let taxa = resp?.taxa ?? 0.05;
+
+                venda1.valor_lucro_da_peca_final = venda.valor_venda - venda.desconto - (venda.pedidos_fornecedor.dolar_compra * venda.pedidos_fornecedor.valor_produto * taxa) - venda.pedidos_fornecedor.produto.valor_transporte
+                // console.log(venda1)
+                await conexao.venda.create(venda1);
+                await conexao.estoque.update({ status_venda: true }, { where: { id: venda.id } });
+
+            })
         } catch (error) {
             return res.status(401).json({
                 msg: "Ocoreu um erro!",

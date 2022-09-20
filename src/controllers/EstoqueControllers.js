@@ -20,6 +20,9 @@ module.exports = {
                                 'valor_venda',
                                 [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
                             ],
+                            where: {
+                                status_venda:false, 
+                            },
                             include: [{
                                 association: "pedidos_fornecedor",
                                 include: [{
@@ -57,6 +60,9 @@ module.exports = {
                                 'valor_venda',
                                 [Sequelize.fn("COUNT", Sequelize.col("pedidos_fornecedor.produto_id")), "total_produtos_em_estoque"],
                             ],
+                            where: {
+                                status_venda:false, 
+                            },
                             include: [{
                                 association: "pedidos_fornecedor",
                                 include: [{
@@ -91,6 +97,7 @@ module.exports = {
                     let data = await conexao.estoque.findAll({
                         where: {
                             pedidos_fornecedor_id,
+                            status_venda:false, 
                         },
                         include: [{
                             all: true,
@@ -117,6 +124,9 @@ module.exports = {
             try {
                 const data = await conexao.estoque.findAll(
                     {
+                        where: {
+                            status_venda:false, 
+                        },
                         include: [{
                             all: true,
                             include: [{
